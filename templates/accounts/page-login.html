@@ -1,0 +1,120 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Login {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block bodyclass %} login-page {% endblock %}
+
+{% block content %}
+
+  <div class="wrapper wrapper-full-page ">
+    
+    <div class="full-page login-page ">
+      <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+      <div class="content">
+        <div class="container">
+          <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+            <form class="form" method="post" id="TypeValidation">
+              <div class="card card-login card-white">
+                <div class="card-header">
+                  <img src="{{ url_for('static', filename='assets/img/card-primary.png') }}" alt="">
+                  <h1 class="card-title">Log in</h1>
+                </div>
+                <div class="card-body">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="tim-icons icon-email-85"></i>
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Username" name="username" required>
+                  </div>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="tim-icons icon-lock-circle"></i>
+                      </div>
+                    </div>
+                    <input placeholder="Client id" type="text" id="client_id" name="client_id" class="form-control" required>
+                  </div>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="tim-icons icon-lock-circle"></i>
+                      </div>
+                    </div>
+                    <input placeholder="Password" type="password" name="password" class="form-control" required>
+                  </div>
+                </div>
+                <div class="card-footer">
+
+                  <button type="submit" class="btn btn-primary btn-lg btn-block mb-3">Login</button>
+                  <div class="pull-left">
+                    <h6>
+                      <a href="/register" class="link footer-link">Create Account</a>
+                    </h6>
+                  </div>
+                  <div class="pull-right">
+                    <h6>
+                      <a href="#" class="link footer-link">Forgot Password?</a>
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% include 'includes/footer-fullscreen.html' %}
+
+    </div>
+<div>{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<script>
+  function displayNotifications(messages) {
+    messages.forEach((message) => {
+      showNotification(message);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const messages = [
+      {% for category, message in messages %}
+        "{{ message }}",
+      {% endfor %}
+    ];
+
+    displayNotifications(messages);
+  });
+</script>
+{% endif %}
+{% endwith %}</div>
+  </div>
+ 
+{% endblock %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}
+<script>
+function showNotification(message) {
+  $.notify({
+    message: `<b></b> ${message}`,
+  }, {
+    type: 'success',
+    allow_dismiss: true,
+    template: `<div class="alert alert-danger alert-with-icon" >
+                 <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                   <i class="tim-icons icon-simple-remove"></i>
+                 </button>
+                 <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                 <span data-notify="message">{2}</span>
+               </div>`,
+    delay: 3000,
+    timer: 1000
+  });
+}
+</script>
+{% endblock javascripts %}

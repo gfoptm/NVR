@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .videoContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.videoItem {
+  width: 100%;
+  position: relative;
+}
+
+/* OVERWRITING VIDEOJS DEFAULT LAYOUT BEGINS */
+.videoItem .video-js {
+/*   padding-top: 100vh !important; */
+}
+
+.videoItem .video-js .vjs-tech {
+  object-fit: cover;
+}
+
+.videoItem .vjs-poster {
+  background-size: cover;
+}
+/* OVERWRITING VIDEOJS DEFAULT LAYOUT ENDS */
+
+/* DESCRIPTION BOX STYLE BEGINS */
+.videoItem__overlay {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: absolute;
+  bottom: 10%;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.videoItem__desc {
+  --gap: 1.5rem;
+  --width: 15rem;
+
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  max-width: var(--width);
+  text-align: center;
+}
+
+.videoItem__desc .videoItem__desc-title {
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.videoItem__desc p {
+  flex: 1 0 auto;
+  font-weight: 200;
+  line-height: 1.6;
+}
+
+.videoItem__desc .videoItem__desc-title,
+.videoItem__desc p {
+  margin-bottom: calc(var(--gap) * 2 / 3);
+}
+
+.videoItem__desc a {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.videoItem__desc a .icon {
+  display: inline-block;
+  margin-left: 0.5em;
+  transition: transform 0.2s ease-out;
+}
+
+.videoItem__desc a:hover .icon {
+  transform: translateX(0.5em);
+}
+
+@media (max-width: 991.98px) {
+  .videoContainer {
+    background-color: #000000;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .videoItem.videoItem--3 {
+    grid-column: span 2;
+    max-width: 25rem;
+    margin: 4rem auto;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .videoContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .videoItem.videoItem--3 {
+    grid-column: span 1;
+    max-width: unset;
+    margin: 0;
+  }
+
+  .videoItem__desc {
+    left: unset;
+  }
+}
+/* DESCRIPTION BOX STYLE ENDS */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Montserrat, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+    </style>
+
+</head>
+<body>
+<div class="videoContainer">
+  <article class="videoItem">
+    <video
+      class="video-js vjs-default-skin"
+      poster='https://images.pexels.com/videos/4841885/pexels-photo-4841885.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 1x, https://images.pexels.com/videos/4841885/pexels-photo-4841885.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500 2x'>
+      <source src="https://player.vimeo.com/external/437123678.sd.mp4?s=4a2756c5420e597c95b8b31cbbcb2c7ba94536bc&profile_id=165&oauth2_token_id=57447761" type='video/mp4' />
+    </video>
+    <div class="videoItem__overlay">
+      <div class="videoItem__desc">
+        <h2 class="videoItem__desc-title">cottonbro</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, praesentium!</p>
+        <a href="https://www.pexels.com/@cottonbro" target="_blank" rel="noopener noreferrer">Explore <span class="icon">❯</span></a>
+      </div>
+    </div>
+  </article>
+
+  <article class="videoItem">
+    <video
+      class="video-js vjs-default-skin"
+      poster='https://images.pexels.com/videos/4841885/pexels-photo-4841885.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 1x, https://images.pexels.com/videos/4841885/pexels-photo-4841885.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500 2x'>
+      <source src="https://player.vimeo.com/external/437123678.sd.mp4?s=4a2756c5420e597c95b8b31cbbcb2c7ba94536bc&profile_id=165&oauth2_token_id=57447761" type='video/mp4' />
+    </video>
+    <div class="videoItem__overlay">
+      <div class="videoItem__desc">
+        <h2 class="videoItem__desc-title">cottonbro</h2>
+        <p>Dolor sit amet consectetur adipisicing elit. Tenetur ipsa quae temporibus eos ex quo unde aperiam minima minus tempore.</p>
+        <a href="https://www.pexels.com/@cottonbro" target="_blank" rel="noopener noreferrer">Explore <span class="icon">❯</span></a>
+      </div>
+    </div>
+  </article>
+
+  <article class="videoItem videoItem--3">
+    <video
+      class="video-js vjs-default-skin"
+      poster='https://images.pexels.com/videos/4842592/pexels-photo-4842592.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 1x, https://images.pexels.com/videos/4842592/pexels-photo-4842592.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500 2x'>
+      <source src="https://player.vimeo.com/external/437176310.sd.mp4?s=13d53ec06347ce03bcfac276c68e340def7e5d28&profile_id=165&oauth2_token_id=57447761" type='video/mp4' />
+    </video>
+    <div class="videoItem__overlay">
+      <div class="videoItem__desc">
+        <h2 class="videoItem__desc-title">cottonbro</h2>
+        <p>Sit amet consectetur, adipisicing elit. Illo quis sunt quo aliquid totam eius.</p>
+        <a href="https://www.pexels.com/@cottonbro" target="_blank" rel="noopener noreferrer">Explore <span class="icon">❯</span></a>
+      </div>
+    </div>
+  </article>
+</div>
+<script>
+        const PLAYER_CONTROLLER = (function() {
+  const DOM = {
+    videoItemArr: document.querySelectorAll(".video-js"),
+  }
+
+  const VID_WIDTH = 500;
+  const VID_HEIGHT = 889;
+
+  const PLAYER_CONFIG = {
+    aspectRatio: `${VID_WIDTH}:${VID_HEIGHT}`,
+    autoplay: true,
+    controls: false,
+    loop: true,
+    muted: true,
+    preload: "auto",
+  }
+
+  let setupPlayer = function() {
+    DOM.videoItemArr.forEach(item => {
+      videojs(item, PLAYER_CONFIG)
+    })
+  }
+
+  return {
+    init() {
+      setupPlayer();
+    }
+  }
+})();
+
+
+const TEXTBOX_CONTROLLER = (function() {
+  const DOM = {
+    textboxArr: document.querySelectorAll('.videoItem__desc')
+  }
+
+  let maxHeight;
+  let findMaxHeight = function() {
+    maxHeight = 0;
+    DOM.textboxArr.forEach(box => {
+      console.log(box.offsetHeight);
+      if(box.offsetHeight > maxHeight) maxHeight = box.offsetHeight;
+    })
+    return maxHeight;
+  }
+
+  let resizeTextbox = function() {
+    const MAX_HEIGHT = findMaxHeight();
+    DOM.textboxArr.forEach(box => box.style.height = MAX_HEIGHT + "px");
+  }
+
+  let setupEventListener = function () {
+    window.addEventListener('load', resizeTextbox);
+    window.addEventListener('resize', resizeTextbox);
+  }
+
+  return {
+    init() {
+      setupEventListener();
+    }
+  }
+})();
+
+PLAYER_CONTROLLER.init();
+TEXTBOX_CONTROLLER.init();
+
+    </script>
+</body>
+</html>

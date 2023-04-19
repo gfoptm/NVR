@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+{% block content %}
+  <h1>Clients</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Is Admin?</th>
+        <th>Profile</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+          <td><a href="{{ url_for('profile', username=user.username) }}">View Profile</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+</body>
+</html>

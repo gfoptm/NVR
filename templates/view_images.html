@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Image</title>
+</head>
+<body>
+    {% for image in images %}
+    <tr>
+        <td>{{ image.filename }}</td>
+        <td><a href="{{ image.url }}">View Image</a></td>
+    </tr>
+{% endfor %}
+</body>
+</html>
+

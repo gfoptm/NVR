@@ -1,0 +1,163 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Extended Tables {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+        .image-wrapper {
+            display: inline-block;
+            text-align: center;
+            margin: 10px;
+        }
+        .image-wrapper img {
+            max-width: 100%;
+            max-height: 200px;
+        }
+        body {
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.popup img {
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.popup .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+    </style>
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+  <div class="content">
+
+      <div class="row">
+        <div class="col-md-12">
+            <div class="">
+              <h4 class="card-title">Pictures for Face Detection</h4>
+            </div>
+              <div class="row text-center">
+                {% for image in image_data %}
+  <div class="col-md-3">
+    <div class="image-wrapper">
+      <div class="caption"><code>{{ image.name }}</code></div>
+      <a href="#" onclick="openImagePopup('{{ image.url }}')"><img src="{{ image.url }}" alt="image"></a>
+      <!-- Add the delete button here -->
+      <button class="btn btn-danger btn-sm" onclick="deleteImage('{{ image.name }}', this)">Delete</button>
+    </div>
+  </div>
+{% endfor %}
+              </div>
+        </div>
+      </div>
+      {% include 'includes/footer.html' %}
+  </div>
+
+   <div class="popup" style="display: none;">
+    <img src="" alt="popup image">
+    <span class="close-button" onclick="closeImagePopup()">&times;</span>
+   </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    function openImagePopup(url) {
+      var popup = document.querySelector('.popup');
+      var image = popup.querySelector('img');
+      image.src = url;
+      popup.style.display = 'flex';
+    }
+    function closeImagePopup() {
+      var popup = document.querySelector('.popup');
+      var image = popup.querySelector('img');
+      image.src = '';
+      popup.style.display = 'none';
+    }
+  </script>
+<!-- Add SweetAlert2 library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+function deleteImage(imageName, buttonElement) {
+  // Confirm the deletion using SweetAlert
+  Swal.fire({
+    title: 'Are you sure you want to delete this image?',
+    icon: 'error',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, keep it'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Send a POST request to the server to delete the image
+      fetch('/delete_image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          // Remove the 'X-CSRFToken' header for testing purposes
+          //'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: `image_name=${encodeURIComponent(imageName)}`
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            // Remove the image element from the page
+            buttonElement.closest('.col-md-3').remove();
+            // Show success message using SweetAlert
+            Swal.fire(
+              'Deleted!',
+              'The image has been deleted.',
+              'success'
+            );
+          } else {
+            // Show error message using SweetAlert
+            Swal.fire(
+              'Error',
+              data.message,
+              'error'
+            );
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Show error message using SweetAlert
+          Swal.fire(
+            'Error',
+            'An error occurred while deleting the image. Please try again.',
+            'error'
+          );
+        });
+    }
+  });
+}
+</script>
+
+{% endblock javascripts %}

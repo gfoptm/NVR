@@ -1,0 +1,72 @@
+
+{% extends "layouts/base.html" %}
+
+{% block title %} User Profile {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="content">
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="title">Welcome, {{ current_user.username }}!</h5>
+              <h1>{{ user.username }}'s Profile</h1>
+            <p>Username: <span class="text-primary"> {{ user.username }}</span></p>
+            <p>Email: <span class="text-primary">{{ user.email }}</span></p>
+            <p>Client ID: <span class="text-primary">{{ user.client_id }}</span></p>
+            <p>Role: <span class="text-primary">{% if user.is_admin %} Admin {% else %} User {% endif %}</span></p>
+            <p>Country: <span class="text-primary">{{ user.country }}</span></p>
+            <p>City: <span class="text-primary">{{ user.city }}</span></p>
+            <p>Address: <span class="text-primary">{{ user.address }}</span></p>
+            <p>Phone: <span class="text-primary">{{ user.phone_number }}</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-user">
+          <div class="card-body">
+            <p class="card-text">
+              <div class="author">
+                <div class="block block-one"></div>
+                <div class="block block-two"></div>
+                <div class="block block-three"></div>
+                <div class="block block-four"></div>
+                <a href="javascript:void(0)">
+                  {% set profile_image_url = url_for('profile_image', user_id=user.id, filename=user.profile_image) if user.profile_image else None %}
+                        {% if profile_image_url %}
+                        <img class="avatar" src="{{ profile_image_url }}" alt="Profile Image" width="200">
+                        {% else %}
+                        <img class="avatar" src="{{ url_for('static', filename='assets/img/avatar2.png') }}" alt="Profile Image" width="200">
+                        {% endif %}
+                  <h5 class="title">{{ user.username }}</h5>
+                </a>
+                <p class="description">
+                  Client ID: {{ user.client_id }}
+                </p>
+                {% if user.is_admin %}
+                 <p>Admin</p>
+                 {% else %}
+                 <p>User</p>
+                 {% endif %}
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+      {% include 'includes/footer.html' %}
+  </div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/user-profile.js') }}"></script>
+{% endblock javascripts %}

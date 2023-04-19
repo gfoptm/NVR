@@ -1,0 +1,319 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} User Profile {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+<style>
+  #webcam-preview {
+    width: auto;
+    height: auto;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="content">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h1 class="title">Welcome, {{ current_user.username }}!</h1>
+          </div>
+          <div class="card-body">
+            <form id="TypeValidation" action="" method="post">
+              {{ form.hidden_tag() }}
+              <div class="row">
+                <div class="col-md-6 pr-md-1">
+                  <div class="form-group has-label">
+                    <label>Username</label>
+                    {{ form.username(class="form-control") }}
+                  </div>
+                </div>
+                <div class="col-md-6 pl-md-1">
+                  <div class="form-group has-label">
+                    <label class="form-label ">Email Address</label>
+                    {{ form.email(class="form-control") }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pr-md-1">
+                  <div class="form-group has-label">
+                    <label>New Password</label>
+                    {{ form.password(class="form-control") }}
+                  </div>
+                </div>
+                <div class="col-md-6 pl-md-1">
+                  <div class="form-group has-label">
+                    <label>Confirm Password</label>
+                    {{ form.confirm_password(class="form-control") }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group has-label">
+                    <label>Address</label>
+                    {{ form.address(class="form-control") }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 pr-md-1">
+                  <div class="form-group has-label">
+                    <label>City</label>
+                    {{ form.city(class="form-control") }}
+                  </div>
+                </div>
+                <div class="col-md-4 px-md-1">
+                  <div class="form-group has-label">
+                    <label>Country</label>
+                    {{ form.country(class="form-control") }}
+                  </div>
+                </div>
+                <div class="col-md-4 pl-md-1">
+                  <div class="form-group has-label">
+                    <label>Phone</label>
+                    {{ form.phone_number(class="form-control") }}
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+              {{ form.submit(class="btn btn-primary") }}
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-user" style="margin-bottom: 15px;">
+          <div class="card-body">
+            <p class="card-text">
+              <div class="author">
+                <div class="block block-one"></div>
+                <div class="block block-two"></div>
+                <div class="block block-three"></div>
+                <div class="block block-four"></div>
+                <form action="{{ url_for('update_image') }}" method="POST" enctype="multipart/form-data" id="LoginValidation">
+                  <div class="form-group">
+                  {% if profile_image_url %}
+                  <img class="avatar" src="{{ profile_image_url }}" alt="Profile Image" width="200">
+                  {% else %}
+                  <img class="avatar" src="{{ url_for('static', filename='assets/img/avatar2.png') }}" alt="Profile Image" width="200">
+                  {% endif %}
+                    <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-simple">Update Image</button>
+                </form>
+                <h4 class="title">{{ current_user.username }}</h4>
+                <p class="description">
+                  Client_id:  {{ current_user.client_id }}
+                </p>
+                {% if current_user.is_admin %}
+                 <p>Admin</p>
+                 {% else %}
+                 <p>User</p>
+                 {% endif %}
+              </div>
+          </div>
+      </div>
+        <div class="card card-contributions">
+          <div class="card-body text-center">
+            <code>Here you can save your picture for face detection...</code>
+            <input type="text" id="image_name" placeholder="Enter image name" class="form-control" required>
+            <input type="file" id="image-upload" name="image-upload" accept="image/*" style="display:none">
+            <button id="upload-image-btn" class="btn btn-primary btn-simple">Upload Image</button>
+            <button id="capture-image-btn" class="btn btn-primary btn-simple">Capture Image</button>
+            <div id="image-container"></div>
+          </div>
+        </div>
+    </div>
+
+
+
+<div>{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<script>
+  function displayNotifications(messages) {
+    messages.forEach((message) => {
+      showNotification(message);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const messages = [
+      {% for category, message in messages %}
+        "{{ message }}",
+      {% endfor %}
+    ];
+
+    displayNotifications(messages);
+  });
+</script>
+{% endif %}
+{% endwith %}</div>
+  </div>
+    {% include 'includes/footer.html' %}
+  </div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+
+{% block javascripts %}
+<script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/user-profile.js') }}"></script>
+<script>
+function showNotification(message) {
+  $.notify({
+    message: `<b></b> ${message}`,
+  }, {
+    type: 'success',
+    allow_dismiss: true,
+    template: `<div class="alert alert-success alert-with-icon" >
+                 <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                   <i class="tim-icons icon-simple-remove"></i>
+                 </button>
+                 <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                 <span data-notify="message">{2}</span>
+               </div>`,
+    delay: 3000,
+    timer: 1000
+  });
+}
+</script>
+<script>
+    function setFormValidation(id) {
+      $(id).validate({
+        highlight: function(element) {
+          $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
+          $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
+        },
+        success: function(element) {
+          $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
+          $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
+        },
+        errorPlacement: function(error, element) {
+          $(element).closest('.form-group').append(error);
+        },
+      });
+    }
+
+    $(document).ready(function() {
+      setFormValidation('#RegisterValidation');
+      setFormValidation('#TypeValidation');
+      setFormValidation('#LoginValidation');
+      setFormValidation('#RangeValidation');
+    });
+  </script>
+<script>
+  document.getElementById('upload-image-btn').addEventListener('click', function() {
+  document.getElementById('image-upload').click();
+});
+
+document.getElementById('image-upload').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      displayImage(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById('capture-image-btn').addEventListener('click', async function() {
+  const { value: useWebcam } = await Swal.fire({
+    title: 'Capture Image',
+    text: 'Do you want to use your webcam to capture an image?',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No'
+  });
+
+  if (useWebcam) {
+    captureWebcamImage();
+  }
+});
+
+function displayImage(src) {
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML = `<img src="${src}" alt="Captured or Uploaded Image">`;
+}
+
+function captureWebcamImage() {
+  Swal.fire({
+    title: 'Capture Image',
+    html: '<div id="webcam-preview"></div>',
+    showCancelButton: true,
+    confirmButtonText: 'Take Picture',
+    cancelButtonText: 'Cancel',
+    willOpen: () => {
+      Webcam.set({
+        width: 480,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+      });
+      Webcam.attach('#webcam-preview');
+    },
+    preConfirm: () => {
+      return new Promise((resolve) => {
+        Webcam.snap((dataUri) => {
+          resolve(dataUri);
+        });
+      });
+    },
+    willClose: () => {
+      Webcam.reset();
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      displayImage(result.value);
+    }
+  });
+}
+// Add the following function to send the image to the server
+// Add the following function to send the image to the server
+async function saveImageOnServer(imageData, imageName) {
+  const formData = new FormData();
+  formData.append('image_data', imageData);
+  formData.append('image_name', imageName);
+
+  const response = await fetch('/save_image', {
+    method: 'POST',
+    body: formData
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    if (result.status === 'success') {
+      Swal.fire('Image Saved', 'The image has been saved on the server.', 'success');
+    } else {
+      Swal.fire('Error', 'Failed to save the image on the server.', 'error');
+    }
+  } else {
+    Swal.fire('Error', 'Failed to save the image on the server.', 'error');
+  }
+}
+
+// Update the displayImage function to save the image on the server
+function displayImage(src) {
+  const imageName = document.getElementById('image_name').value;
+  if (!imageName) {
+    Swal.fire('Error', 'Please enter an image name.', 'error');
+    return;
+  }
+  saveImageOnServer(src, imageName);
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML = `<img src="${src}" alt="Captured or Uploaded Image">`;
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+
+<!-- Include SweetAlert2 library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock javascripts %}

@@ -1,0 +1,65 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="78" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="1">
+            <item index="0" class="java.lang.String" itemvalue="required" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ourVersions">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="2.7" />
+            <item index="1" class="java.lang.String" itemvalue="3.10" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="6">
+            <item index="0" class="java.lang.String" itemvalue="Pillow" />
+            <item index="1" class="java.lang.String" itemvalue="Flask" />
+            <item index="2" class="java.lang.String" itemvalue="gevent" />
+            <item index="3" class="java.lang.String" itemvalue="Werkzeug" />
+            <item index="4" class="java.lang.String" itemvalue="MarkupSafe" />
+            <item index="5" class="java.lang.String" itemvalue="Jinja2" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+          <option value="N806" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="store.forms" />
+          <option value="mediapipe" />
+          <option value="cv2.VideoCapture" />
+          <option value="cv2.*" />
+          <option value="authentication.admin.user" />
+          <option value="device" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='assets/img/apple-icon.png') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/favicon.png') }}">
+
+  <title>
+    Flask Black Dashboard PRO - {% block title %} {% endblock title %} | AppSeed
+  </title>
+  
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="{{ url_for('static', filename='assets/css/nucleo-icons.css') }}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{{ url_for('static', filename='assets/css/black-dashboard.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/css/theme-switcher.css') }}" rel="stylesheet" />
+  <script src="{{ url_for('static', filename='assets/js/themeSettings.js') }}" defer></script>
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="{{ url_for('static', filename='assets/demo/demo.css') }}" rel="stylesheet" />
+
+  <!-- Specific Page CSS goes HERE  -->  
+  {% block stylesheets %}{% endblock stylesheets %}
+
+</head> 
+<body class="{% block bodyclass %}{% endblock %}">
+  
+  {% include 'includes/navigation-fullscreen.html' %}
+
+  {% block content %}{% endblock %}
+
+  {% include 'includes/scripts.html' %} 
+
+  <!-- Specific Page JS goes HERE  -->
+  {% block javascripts %}{% endblock javascripts %}
+
+</body>
+</html>

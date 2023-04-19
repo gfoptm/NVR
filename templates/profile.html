@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+{% block content %}
+  <h1>Profile</h1>
+  <p>Welcome, {{ current_user.username }}!</p>
+  <p>Client ID: {{ current_user.client_id }}</p>
+  {% if current_user.is_admin %}
+    <p>You have admin privileges.</p>
+  {% else %}
+    <p>You are a regular user.</p>
+
+<a href="{{ url_for('edit_profile') }}">edit profile</a>
+
+  {% endif %}
+{% endblock %}
+</body>
+</html>

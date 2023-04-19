@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Camera Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .camera {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            width: calc(50% - 40px);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .camera video {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .camera-title {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="camera">
+            <h3 class="camera-title">Camera 1</h3>
+            <video src="camera1-url" autoplay muted loop></video>
+        </div>
+        <div class="camera">
+            <h3 class="camera-title">Camera 2</h3>
+            <video src="camera2-url" autoplay muted loop></video>
+        </div>
+        <div class="camera">
+            <h3 class="camera-title">Camera 3</h3>
+            <video src="camera3-url" autoplay muted loop></video>
+        </div>
+        <div class="camera">
+            <h3 class="camera-title">Camera 4</h3>
+            <video src="camera4-url" autoplay muted loop></video>
+        </div>
+    </div>
+</body>
+</html>

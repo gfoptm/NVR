@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Camera Streaming</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js" integrity="sha512-2KxTQp8TfTfn1aluChKjvn9EA32tGgD8HTvF+YH4w4jK2Q4b8+q4GqM9Sf9ECIsjEgUGlcS7MShy+/hOe+/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        video {
+            width: 640px;
+            height: 480px;
+            margin: 10px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multi-Camera Streaming</h1>
+    <video id="video-camera" autoplay></video>
+    <video id="video-object-detection" autoplay></video>
+    <button id="toggle-record">Toggle Record</button>
+
+    <script>
+        const socket = io();
+        const videoCamera = document.getElementById('video-camera');
+        const videoObjectDetection = document.getElementById('video-object-detection');
+        const toggleRecordButton = document.getElementById('toggle-record');
+
+        socket.on('video_frame', (data) => {
+            const cameraId = data.camera_id;
+            const image = data.image;
+
+            if (cameraId === 0) {
+                videoCamera.src = `data:image/jpeg;base64,${image}`;
+            }
+        });
+
+        socket.on('object_detected_frame', (data) => {
+            const cameraId = data.camera_id;
+            const image = data.image;
+
+            if (cameraId === 0) {
+                videoObjectDetection.src = `data:image/jpeg;base64,${image}`;
+            }
+        });
+
+        toggleRecordButton.addEventListener('click', () => {
+            socket.emit('toggle_record', { camera_id: 0 });
+        });
+    </script>
+</body>
+</html>

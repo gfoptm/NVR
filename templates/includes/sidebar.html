@@ -1,0 +1,292 @@
+
+    <div class="sidebar">
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="javascript:void(0)" class="simple-text logo-mini">
+                    SN
+                </a>
+                <a href="javascript:void(0)" class="simple-text logo-normal">
+                    Sky Net
+                </a>
+            </div>
+            <ul class="nav">
+                <li class="{% if 'index' in segment %} active {% endif %}">
+                    <a href="/">
+                        <i class="tim-icons icon-tv-2"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="{% if 'profile' in segment %} active {% endif %}">
+                    <a href="/profile">
+                        <i class="tim-icons icon-single-02"></i>
+                        <p>My profile</p>
+                    </a>
+                </li>
+                {% if current_user.is_admin %}
+                <li class="{% if 'profile' in segment %} active {% endif %}">
+                    <a href="{{ url_for('admin_clients') }}">
+                    <i class="tim-icons icon-badge"></i>
+                    <p>Users</p>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="{% if 'profile' in segment %} active {% endif %}">
+                    <a href="{{ url_for('face_images') }}">
+                        <i class="tim-icons icon-image-02"></i>
+                        <p>Images</p>
+                    </a>
+                </li>
+                <li class="{% if 'profile' in segment %} active {% endif %}">
+                    <a href="/archive">
+                        <i class="tim-icons icon-video-66"></i>
+                        <p>Archive</p>
+                    </a>
+                </li>
+                <li class="{% if 'page-' in segment %} active {% endif %}">
+                    <a data-toggle="collapse" href="#pagesExamples">
+                        <i class="tim-icons icon-image-02"></i>
+                        <p>
+                            Pages
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {% if 'page-' in segment %} show {% endif %}" id="pagesExamples">
+                        <ul class="nav">
+                            <li>
+                                <a href="/page-pricing.html">
+                                    <span class="sidebar-mini-icon">P</span>
+                                    <span class="sidebar-normal"> Pricing </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/page-rtl.html">
+                                    <span class="sidebar-mini-icon">RS</span>
+                                    <span class="sidebar-normal"> RTL Support </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/page-timeline.html">
+                                    <span class="sidebar-mini-icon">T</span>
+                                    <span class="sidebar-normal"> Timeline </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/page-login.html">
+                                    <span class="sidebar-mini-icon">L</span>
+                                    <span class="sidebar-normal"> Login </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/page-register.html">
+                                    <span class="sidebar-mini-icon">R</span>
+                                    <span class="sidebar-normal"> Register </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/page-lock.html">
+                                    <span class="sidebar-mini-icon">LS</span>
+                                    <span class="sidebar-normal"> Lock Screen </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'page-user' in segment %} active {% endif %}">
+                                <a href="/page-user.html">
+                                    <span class="sidebar-mini-icon">UP</span>
+                                    <span class="sidebar-normal"> Settings </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="{% if 'components-' in segment %} active {% endif %}">
+                    <a data-toggle="collapse" href="#componentsExamples">
+                        <i class="tim-icons icon-molecule-40"></i>
+                        <p>
+                            Components
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {% if 'components-' in segment %} show {% endif %}" id="componentsExamples">
+                        <ul class="nav">
+                            <li>
+                                <a data-toggle="collapse" aria-expanded="false" href="#multicollapse">
+                                    <span class="sidebar-mini-icon">MLT</span>
+                                    <span class="sidebar-normal"> Multi Level Collapse
+                                        <b class="caret"></b>
+                                    </span>
+                                </a>
+                                <div class="collapse" id="multicollapse">
+                                    <ul class="nav">
+                                        <li>
+                                            <a>
+                                                <span class="sidebar-mini-icon">E</span>
+                                                <span class="sidebar-normal"> Example </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="{% if 'components-buttons' in segment %} active {% endif %}">
+                                <a href="/components-buttons.html">
+                                    <span class="sidebar-mini-icon">B</span>
+                                    <span class="sidebar-normal"> Buttons </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'components-grid' in segment %} active {% endif %}">
+                                <a href="/components-grid.html">
+                                    <span class="sidebar-mini-icon">G</span>
+                                    <span class="sidebar-normal"> Grid System </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'components-panels' in segment %} active {% endif %}">
+                                <a href="/components-panels.html">
+                                    <span class="sidebar-mini-icon">P</span>
+                                    <span class="sidebar-normal"> Panels </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'components-sweet' in segment %} active {% endif %}">
+                                <a href="/components-sweet-alert.html">
+                                    <span class="sidebar-mini-icon">SA</span>
+                                    <span class="sidebar-normal"> Sweet Alert </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'components-notifications' in segment %} active {% endif %}">
+                                <a href="/components-notifications.html">
+                                    <span class="sidebar-mini-icon">N</span>
+                                    <span class="sidebar-normal"> Notifications </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'components-icons' in segment %} active {% endif %}">
+                                <a href="/components-icons.html">
+                                    <span class="sidebar-mini-icon">I</span>
+                                    <span class="sidebar-normal"> Icons </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'components-typography' in segment %} active {% endif %}">
+                                <a href="/components-typography.html">
+                                    <span class="sidebar-mini-icon">T</span>
+                                    <span class="sidebar-normal"> Typography </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="{% if 'forms-' in segment %} active {% endif %}">
+                    <a data-toggle="collapse" href="#formsExamples">
+                        <i class="tim-icons icon-notes"></i>
+                        <p>
+                            Forms
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {% if 'forms-' in segment %} show {% endif %}" id="formsExamples">
+                        <ul class="nav">
+                            <li class="{% if 'forms-regular' in segment %} active {% endif %}">
+                                <a href="/forms-regular.html">
+                                    <span class="sidebar-mini-icon">RF</span>
+                                    <span class="sidebar-normal"> Regular Forms </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'forms-extended' in segment %} active {% endif %}">
+                                <a href="/forms-extended.html">
+                                    <span class="sidebar-mini-icon">EF</span>
+                                    <span class="sidebar-normal"> Extended Forms </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'forms-validation' in segment %} active {% endif %}">
+                                <a href="/forms-validation.html">
+                                    <span class="sidebar-mini-icon">V</span>
+                                    <span class="sidebar-normal"> Validation Forms </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'forms-wizard' in segment %} active {% endif %}">
+                                <a href="/forms-wizard.html">
+                                    <span class="sidebar-mini-icon">W</span>
+                                    <span class="sidebar-normal"> Wizard </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="{% if 'tables-' in segment %} active {% endif %}">
+                    <a data-toggle="collapse" href="#tablesExamples">
+                        <i class="tim-icons icon-puzzle-10"></i>
+                        <p>
+                            Tables
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {% if 'tables-' in segment %} show {% endif %}" id="tablesExamples">
+                        <ul class="nav">
+                            <li class="{% if 'tables-regular' in segment %} active {% endif %}">
+                                <a href="/tables-regular.html">
+                                    <span class="sidebar-mini-icon">RT</span>
+                                    <span class="sidebar-normal"> Regular Tables </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'tables-extended' in segment %} active {% endif %}">
+                                <a href="/tables-extended.html">
+                                    <span class="sidebar-mini-icon">ET</span>
+                                    <span class="sidebar-normal"> Extended Tables </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'tables-datatables' in segment %} active {% endif %}">
+                                <a href="/tables-datatables.net.html">
+                                    <span class="sidebar-mini-icon">DT</span>
+                                    <span class="sidebar-normal"> DataTables.net </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="{% if 'maps-' in segment %} active {% endif %}">
+                    <a data-toggle="collapse" href="#mapsExamples">
+                        <i class="tim-icons icon-pin"></i>
+                        <p>
+                            Maps
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {% if 'maps-' in segment %} show {% endif %}" id="mapsExamples">
+                        <ul class="nav">
+                            <li class="{% if 'maps-google' in segment %} active {% endif %}">
+                                <a href="/maps-google.html">
+                                    <span class="sidebar-mini-icon">GM</span>
+                                    <span class="sidebar-normal"> Google Maps </span>
+                                </a>
+                            </li>
+                            <li class="{% if 'maps-vector' in segment %} active {% endif %}">
+                                <a href="/maps-vector.html">
+                                    <span class="sidebar-mini-icon">VM</span>
+                                    <span class="sidebar-normal"> Vector Map </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="{% if 'widgets' in segment %} active {% endif %}">
+                    <a href="/widgets.html">
+                        <i class="tim-icons icon-settings"></i>
+                        <p>Widgets</p>
+                    </a>
+                </li>
+                <li class="{% if 'charts' in segment %} active {% endif %}">
+                    <a href="/charts.html">
+                        <i class="tim-icons icon-chart-bar-32"></i>
+                        <p>Charts</p>
+                    </a>
+                </li>
+                <li class="{% if 'calendar' in segment %} active {% endif %}">
+                    <a href="/calendar.html">
+                        <i class="tim-icons icon-time-alarm"></i>
+                        <p>Calendar</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('logout') }}" >
+                        <i class="tim-icons icon-user-run"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

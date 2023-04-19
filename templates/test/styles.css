@@ -1,0 +1,53 @@
+.nav--icons {
+  position: absolute;
+  bottom: 2em;
+  left: 1em;
+  right: 1em;
+  background: linear-gradient(135deg, #e14eca 0%, #ba54f5 100%);
+  padding: 10px;
+  border-radius: 20px; /* Add this line to create a rounded shape */
+  border: 1px #525f7f; /* Add this line to create a black border */
+}
+.nav--icons ul {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+}
+.nav--icons ul li a {
+  font-family: sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #ffffff;
+  line-height: 1;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  border-radius: 3em;
+  padding: 0.75em 1.25em;
+  transition: 0.6s ease-in-out;
+}
+.nav--icons ul li a span {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  padding-left: 0.5em;
+  transform: translate3d(-0.5em, 0, 0);
+  transition: opacity 0.6s, max-width 0.6s, transform 0.6s;
+  transition-timing-function: ease-in-out;
+}
+.nav--icons ul li a:hover,
+.nav--icons ul li a.is-active {
+  color: #fff;
+  background-color: #32325d;
+}
+.nav--icons ul li a:hover span,
+.nav--icons ul li a.is-active span {
+  opacity: 1;
+  max-width: 40px;
+  transform: translate3d(0, 0, 0);
+}

@@ -1,0 +1,263 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+        .camera-placeholder {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+
+            background-color: black;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .camera-placeholder canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .record-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            height: 2.375rem;
+            min-width: 2.375rem;
+            width: 2.375rem;
+            padding: 0;
+            font-size: 0.9375rem;
+            overflow: hidden;
+            line-height: normal;
+        }
+
+        .fullscreen-button {
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            height: 2.375rem;
+            min-width: 2.375rem;
+            width: 2.375rem;
+            padding: 0;
+            font-size: 0.9375rem;
+            overflow: hidden;
+            line-height: normal;
+        }
+
+        .camera-message {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff; /* Set the text color */
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+        <div class="content">
+
+    <div class="row">
+      <div class="col-lg-6 col-sm-6 text-center" style="padding-left: 5px; padding-right: 5px;">
+        <div class="card card-contributions" style="margin-bottom: 5px;">
+          <div class="card-body" style="padding: 5px;">
+            <div class="camera-placeholder">
+             <img id="camera_0">
+            </div>
+            <span id="camera_0_message" class="camera-message">No camera stream available</span>
+            <button id="record_button_0" class="record-button btn btn-danger" data-camera-id="0">Rec</button>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" checked>
+                  <span>Face Detect</span>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF">
+                  <span>Object Detect</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-contributions" style="margin-bottom: 5px;">
+          <div class="card-body" style="padding: 5px;">
+            <div class="camera-placeholder">
+             <img id="camera_1">
+            </div>
+            <span id="camera_1_message" class="camera-message">No camera stream available</span>
+            <button id="record_button_1" class="record-button btn btn-danger" data-camera-id="1">Rec</button>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" checked>
+                  <span>Face Detect</span>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF">
+                  <span>Object Detect</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6 text-center" style="padding-left: 5px; padding-right: 5px;">
+        <div class="card card-contributions" style="margin-bottom: 5px;">
+          <div class="card-body" style="padding: 5px;">
+            <div class="camera-placeholder">
+             <img id="camera_2">
+            </div>
+            <span id="camera_2_message" class="camera-message">No camera stream available</span>
+            <button id="record_button_2" class="record-button btn btn-danger" data-camera-id="2">Rec</button>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" checked>
+                  <span>Face Detect</span>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF">
+                  <span>Object Detect</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-contributions" style="margin-bottom: 5px;">
+          <div class="card-body" style="padding: 5px;">
+            <div class="camera-placeholder">
+             <img id="camera_3">
+            </div>
+            <span id="camera_3_message" class="camera-message">No camera stream available</span>
+            <button id="record_button_3" class="record-button btn btn-danger" data-camera-id="3">Rec</button>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" checked>
+                  <span>Face Detect</span>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                <div class="card-stats justify-content-center">
+                  <input type="checkbox" name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF">
+                  <span>Object Detect</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+    {% include 'includes/footer.html' %}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var lastFrameUpdate = {};
+    var recordStatuses = {};
+
+    // Get the client ID from the URL parameters
+    var urlParams = new URLSearchParams(window.location.search);
+    var clientId = urlParams.get('client_id') || "1";
+
+    // Register the client ID with the server
+    socket.emit('register_client_id', clientId);
+
+    socket.on('video_frame', function (data) {
+        var camera_id = data.camera_id;
+        var image_data = data.image;
+        var img = document.getElementById('camera_' + camera_id);
+        var message = document.getElementById('camera_' + camera_id + '_message');
+
+        img.src = 'data:image/jpeg;base64,' + image_data;
+        message.style.display = 'none';
+        lastFrameUpdate[camera_id] = new Date();
+    });
+
+    function toggleRecord(camera_id, clientId) {
+        var recordKey = clientId + '_' + camera_id;
+
+        if (!(recordKey in recordStatuses)) {
+            recordStatuses[recordKey] = false;
+        }
+
+        recordStatuses[recordKey] = !recordStatuses[recordKey];
+        socket.emit('toggle_record', { 'camera_id': camera_id, 'client_id': clientId, 'status': recordStatuses[recordKey] });
+
+        var button = document.getElementById('record_button_' + camera_id);
+        button.textContent = button.textContent === 'Rec' ? 'Stop' : 'Rec';
+    }
+
+    var recordButtons = document.querySelectorAll('.record-button');
+    for (var i = 0; i < recordButtons.length; i++) {
+        recordButtons[i].addEventListener('click', function (event) {
+            var camera_id = parseInt(event.target.getAttribute('data-camera-id'));
+            toggleRecord(camera_id, clientId);
+        });
+    }
+
+    function checkCameraStream() {
+        var currentTime = new Date();
+        for (var camera_id in lastFrameUpdate) {
+            var elapsedTime = currentTime - lastFrameUpdate[camera_id];
+            var message = document.getElementById('camera_' + camera_id + '_message');
+            if (elapsedTime > 5000) {
+                message.style.display = 'inline';
+            } else {
+                message.style.display = 'none';
+            }
+        }
+        setTimeout(checkCameraStream, 1000);
+    }
+
+    checkCameraStream();
+});
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+        demo.initVectorMap();
+
+    });
+</script>
+
+{% endblock javascripts %}

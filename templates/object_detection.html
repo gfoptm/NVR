@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Camera Streaming</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var lastFrameUpdate = {};
+    var recordStatuses = {};
+
+    // Get the client ID from the URL parameters
+    var urlParams = new URLSearchParams(window.location.search);
+    var clientId = urlParams.get('client_id') || "1";
+
+    // Register the client ID with the server
+    socket.emit('register_client_id', clientId);
+
+    socket.on('face_frame', function (data) {
+        var camera_id = data.camera_id;
+        var image_data = data.image;
+        var img = document.getElementById('camera_' + camera_id);
+        var message = document.getElementById('camera_' + camera_id + '_message');
+
+        img.src = 'data:image/jpeg;base64,' + image_data;
+        message.style.display = 'none';
+        lastFrameUpdate[camera_id] = new Date();
+    });
+
+    function toggleRecord(camera_id, clientId) {
+        var recordKey = clientId + '_' + camera_id;
+
+        if (!(recordKey in recordStatuses)) {
+            recordStatuses[recordKey] = false;
+        }
+
+        recordStatuses[recordKey] = !recordStatuses[recordKey];
+        socket.emit('toggle_record', { 'camera_id': camera_id, 'client_id': clientId, 'status': recordStatuses[recordKey] });
+
+        var button = document.getElementById('record_button_' + camera_id);
+        button.textContent = button.textContent === 'Start Recording' ? 'Stop Recording' : 'Start Recording';
+    }
+
+    var recordButtons = document.querySelectorAll('.record-button');
+    for (var i = 0; i < recordButtons.length; i++) {
+        recordButtons[i].addEventListener('click', function (event) {
+            var camera_id = parseInt(event.target.getAttribute('data-camera-id'));
+            toggleRecord(camera_id, clientId);
+        });
+    }
+
+    function checkCameraStream() {
+        var currentTime = new Date();
+        for (var camera_id in lastFrameUpdate) {
+            var elapsedTime = currentTime - lastFrameUpdate[camera_id];
+            var message = document.getElementById('camera_' + camera_id + '_message');
+            if (elapsedTime > 5000) {
+                message.style.display = 'inline';
+            } else {
+                message.style.display = 'none';
+            }
+        }
+        setTimeout(checkCameraStream, 1000);
+    }
+
+    checkCameraStream();
+});
+
+
+</script>
+</head>
+<body>
+    <h1>Multi-Camera Streaming</h1>
+    <div>
+        <img id="camera_0" alt="Camera 0">
+        <button id="record_button_0" class="record-button" data-camera-id="0">Start Recording</button>
+    </div>
+    <div>
+        <img id="camera_1" alt="Camera 1">
+        <button id="record_button_1" class="record-button" data-camera-id="1">Start Recording</button>
+    </div>
+    <!-- Add more camera feeds and buttons as needed -->
+
+    <br>
+    <a href="{{ url_for('archive') }}">Go to Video Archive</a>
+</body>
+</html>

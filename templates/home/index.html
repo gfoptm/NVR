@@ -1,0 +1,228 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .hidden {
+  display: none;
+}
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="content">
+  <div class="col-lg-12 col-sm-12 text-center" style="padding-bottom: 20px;">
+  <div class="form-group">
+    <select class="selectpicker" data-size="7" data-style="btn btn-simple" title="Select camera range:" id="cameraRange">
+      <option value="4">1-4</option>
+      <option value="8">1-8</option>
+      <option value="16">1-16</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+    {% for i in range(16) %}
+    <div class="col-lg-6 col-sm-6 text-center camera-card-container hidden" style="padding-left: 5px; padding-right: 5px;">
+        <div class="card card-contributions" style="margin-bottom: 5px;">
+            <div class="card-body" style="padding: 5px;">
+                <div class="camera-placeholder">
+                    <canvas id="canvas_{{ i }}" width="640" height="480"></canvas>
+                </div>
+                <span id="camera_{{ i }}_message" class="camera-message">No camera stream available</span>
+                <button id="record_button_{{ i }}" class="record-button btn btn-danger" data-camera-id="{{ i }}">Rec</button>
+                <button id="fullscreen_button_{{ i }}" class="fullscreen-button btn btn-simple" data-camera-id="{{ i }}">Full</button>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                        <div class="card-stats justify-content-center">
+                            <input type="checkbox" name="checkbox" class="bootstrap-switch" id="face-checkbox_{{ i }}" data-on-label="ON" data-off-label="OFF">
+                            <span>Face Detect</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-8 ml-auto mr-auto">
+                        <div class="card-stats justify-content-center">
+                            <input type="checkbox" name="checkbox" class="bootstrap-switch" id="object-checkbox_{{ i }}" data-on-label="ON" data-off-label="OFF">
+                            <span>Object Detect</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endfor %}
+
+</div>
+
+    {% include 'includes/footer.html' %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+<script>
+        function drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, objectImage, faceImage) {
+            ctx.clearRect(0, 0, 640, 480);
+            ctx.drawImage(originalImage, 0, 0, 640, 480);
+
+            if (objectCheckbox.checked && objectImage) {
+                ctx.drawImage(objectImage, 0, 0, 640, 480);
+            }
+
+            if (faceCheckbox.checked && faceImage) {
+                ctx.drawImage(faceImage, 0, 0, 640, 480);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            // Get the client ID from the URL parameters
+            var urlParams = new URLSearchParams(window.location.search);
+            var clientId = urlParams.get('client_id') || "1";
+            var recordStatuses = {};
+            var lastFrameUpdate = {};
+
+            // Register the client ID with the server
+            socket.emit('register_client_id', clientId);
+
+            socket.on("connect", () => {
+                console.log("Connected to the server.");
+            });
+
+            socket.on("video_frame", (data) => {
+                var camera_id = data.camera_id;
+                var canvas = document.getElementById('canvas_' + camera_id);
+                var ctx = canvas.getContext('2d');
+
+                var faceCheckbox = document.getElementById('face-checkbox_' + camera_id);
+                var objectCheckbox = document.getElementById('object-checkbox_' + camera_id);
+
+                var originalImage = new Image();
+                originalImage.src = `data:image/jpeg;base64,${data.image}`;
+                originalImage.onload = function() {
+                    if (objectCheckbox.checked && data.object_image) {
+                        var objectImage = new Image();
+                        objectImage.src = `data:image/jpeg;base64,${data.object_image}`;
+                        objectImage.onload = function() {
+                            if (faceCheckbox.checked && data.face_image) {
+                                var faceImage = new Image();
+                                faceImage.src = `data:image/jpeg;base64,${data.face_image}`;
+                                faceImage.onload = function() {
+                                    drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, objectImage, faceImage);
+                                }
+                            } else {
+                                drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, objectImage, null);
+                            }
+                        }
+                    } else if (faceCheckbox.checked && data.face_image) {
+                        var faceImage = new Image();
+                        faceImage.src = `data:image/jpeg;base64,${data.face_image}`;
+                        faceImage.onload = function() {
+                            drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, null, faceImage);
+                        }
+                    } else {
+                        drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, null, null);
+                    }
+                }
+              lastFrameUpdate[camera_id] = new Date();
+            });
+            function toggleRecord(camera_id, clientId) {
+            var recordKey = clientId + '_' + camera_id;
+
+            if (!(recordKey in recordStatuses)) {
+            recordStatuses[recordKey] = false;
+            }
+
+            recordStatuses[recordKey] = !recordStatuses[recordKey];
+            socket.emit('toggle_record', { 'camera_id': camera_id, 'client_id': clientId, 'status': recordStatuses[recordKey] });
+
+            var button = document.getElementById('record_button_' + camera_id);
+            button.textContent = button.textContent === 'Rec' ? 'Stop' : 'Rec';
+            }
+
+            var recordButtons = document.querySelectorAll('.record-button');
+            for (var i = 0; i < recordButtons.length; i++) {
+                recordButtons[i].addEventListener('click', function (event) {
+                var camera_id = parseInt(event.target.getAttribute('data-camera-id'));
+                toggleRecord(camera_id, clientId);
+            });
+        }
+        function checkCameraStream() {
+            var currentTime = new Date();
+                for (var camera_id in lastFrameUpdate) {
+                var elapsedTime = currentTime - lastFrameUpdate[camera_id];
+                var message = document.getElementById('camera_' + camera_id + '_message');
+                if (elapsedTime > 5000) {
+                    message.style.display = 'inline';
+                } else {
+                    message.style.display = 'none';
+                }
+            }
+            setTimeout(checkCameraStream, 1000);
+        }
+
+        checkCameraStream();
+        });
+    </script>
+<script>
+  var fullscreenButtons = document.querySelectorAll('.fullscreen-button');
+for (var i = 0; i < fullscreenButtons.length; i++) {
+    fullscreenButtons[i].addEventListener('click', function (event) {
+        var camera_id = parseInt(event.target.getAttribute('data-camera-id'));
+        var canvas = document.getElementById('canvas_' + camera_id);
+        toggleFullscreen(canvas);
+    });
+}
+function toggleFullscreen(canvas) {
+    if (!document.fullscreenElement &&
+        !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        } else if (canvas.msRequestFullscreen) {
+            canvas.msRequestFullscreen();
+        } else if (canvas.mozRequestFullScreen) {
+            canvas.mozRequestFullScreen();
+        } else if (canvas.webkitRequestFullscreen) {
+            canvas.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+}
+
+</script>
+<script>
+  document.getElementById('cameraRange').addEventListener('change', function (event) {
+  var selectedRange = parseInt(event.target.value);
+  var cameraCards = document.querySelectorAll('.camera-card-container');
+
+  for (var i = 0; i < cameraCards.length; i++) {
+    if (i < selectedRange) {
+      cameraCards[i].classList.remove('hidden');
+    } else {
+      cameraCards[i].classList.add('hidden');
+    }
+  }
+});
+
+document.getElementById('cameraRange').dispatchEvent(new Event('change'));
+
+</script>
+{% endblock javascripts %}

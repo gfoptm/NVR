@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Camera Stream</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <style>
+        video {
+            width: 640px;
+            height: 480px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multi-Camera Stream</h1>
+
+    <form id="user_form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Join</button>
+    </form>
+
+    <video id="video" autoplay muted style="display:none;"></video>
+
+    <script>
+        const userForm = document.getElementById('user_form');
+        const usernameInput = document.getElementById('username');
+        const video = document.getElementById('video');
+
+        userForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const username = usernameInput.value;
+            const socket = io({ query: { username } });
+
+            socket.on('connect', () => {
+                console.log('Connected to server');
+            });
+
+            socket.on('video_frame', (data) => {
+                const { camera_id, image } = data;
+
+                if (camera_id === parseInt('{{ registered_users[username] }}')) {
+                    const base64Image = 'data:image/jpeg;base64,' + image;
+                    video.src = base64Image;
+                    video.style.display = 'block';
+                }
+            });
+
+            socket.on('disconnect', () => {
+                console.log('Disconnected from server');
+            });
+        });
+    </script>
+</body>
+</html>

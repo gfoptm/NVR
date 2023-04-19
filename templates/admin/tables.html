@@ -1,0 +1,190 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Extended Tables {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="content">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="tools float-right">
+              <div class="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle btn-link btn-icon" data-toggle="dropdown">
+                  <i class="tim-icons icon-settings-gear-63"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a class="dropdown-item text-danger" href="#">Remove Data</a>
+                </div>
+              </div>
+            </div>
+            <h4 class="card-title">User Table</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <tr>
+                    <th class="text-center">
+                      #
+                    </th>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Role
+                    </th>
+                    <th class="text-center">
+                      Client id
+                    </th>
+                    <th class="text-center">
+                      Phone
+                    </th>
+                    <th class="text-right">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                  <tr>
+                    <td class="text-center">
+                      <div class="photo">
+                        {% set profile_image_url = url_for('profile_image', user_id=user.id, filename=user.profile_image) if user.profile_image else None %}
+                        {% if profile_image_url %}
+                        <img class="avatar" src="{{ profile_image_url }}" alt="Profile Image" width="200">
+                        {% else %}
+                        <img class="avatar" src="{{ url_for('static', filename='assets/img/avatar2.png') }}" alt="Profile Image" width="200">
+                        {% endif %}
+                      </div>
+                    </td>
+                    <td>
+                      <a href="{{ url_for('admin_user_profile', user_id=user.id) }}">{{ user.username }}</a>
+                    </td>
+                    <td>
+                      {% if user.is_admin %}
+                      <p>Admin</p>
+                      {% else %}
+                      <p>User</p>
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      {{ user.client_id }}
+                    </td>
+                    <td class="text-center">
+                      {{ user.phone_number }}
+                    </td>
+                    <td class="text-right">
+                      <button type="button" rel="tooltip" class="btn btn-success btn-link btn-sm btn-icon " data-original-title="Tooltip on top" title="Refresh">
+                        <i class="tim-icons icon-refresh-01"></i>
+                      </button>
+                      <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-sm " onclick="deleteUser({{ user.id }})"  data-original-title="Tooltip on top" title="Delete">
+                        <i class="tim-icons icon-simple-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
+                 {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+
+</div>
+      <div>{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<script>
+  function displayNotifications(messages) {
+    messages.forEach((message) => {
+      showNotification(message);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const messages = [
+      {% for category, message in messages %}
+        "{{ message }}",
+      {% endfor %}
+    ];
+
+    displayNotifications(messages);
+  });
+</script>
+{% endif %}
+{% endwith %}</div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+    
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+async function deleteUser(userId) {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'You will not be able to recover this user!',
+    icon: 'error',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, keep it'
+  });
+
+  if (result.isConfirmed) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/admin/delete_user/${userId}`;
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
+</script>
+<script>
+function showNotification(message) {
+  $.notify({
+    message: `<b></b> ${message}`,
+  }, {
+    type: 'success',
+    allow_dismiss: true,
+    template: `<div class="alert alert-success alert-with-icon" >
+                 <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                   <i class="tim-icons icon-simple-remove"></i>
+                 </button>
+                 <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                 <span data-notify="message">{2}</span>
+               </div>`,
+    delay: 3000,
+    timer: 1000
+  });
+}
+</script>
+<script>
+        async function fetchImages() {
+            const response = await fetch('/view_all_images');
+            const data = await response.json();
+            const imageContainer = document.getElementById('image-container');
+
+            data.image_paths.forEach(imagePath => {
+                const imgElement = document.createElement('img');
+                imgElement.src = `/view_image/${imagePath}`;
+                imageContainer.appendChild(imgElement);
+            });
+        }
+
+        fetchImages();
+    </script>
+{% endblock javascripts %}

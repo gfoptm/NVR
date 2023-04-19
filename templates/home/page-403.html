@@ -1,0 +1,55 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Error 403 {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block bodyclass %} login-page {% endblock %}
+
+{% block content %}
+
+  <div class="wrapper wrapper-full-page ">
+    <div class="full-page login-page ">
+      <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+      <div class="content">
+        <div class="container">
+          <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+            
+              <div class="card card-login card-white">
+                <div class="card-header">
+                  <img src="{{ config.ASSETS_ROOT }}/img/card-primary.png" alt="">
+                  <h1 class="card-title">
+                    403
+                  </h1>
+                </div>
+                <div class="card-body">
+
+                  <br />
+                  
+                  <h4 class="card-title text-center">
+                    Access Denied - Please contact support.
+                  </h4>
+
+                </div>
+                <div class="card-footer text-center">
+
+                  <a href="/" class="btn btn-primary btn-round btn-lg">Home</a>
+
+                </div>
+
+              </div>
+             
+          </div>
+        </div>
+      </div>
+
+      {% include 'includes/footer-fullscreen.html' %} 
+
+    </div>
+  </div>
+ 
+{% endblock %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

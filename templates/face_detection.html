@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Video Streaming</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script>
+        function drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, objectImage, faceImage) {
+            ctx.clearRect(0, 0, 640, 480);
+            ctx.drawImage(originalImage, 0, 0, 640, 480);
+
+            if (objectCheckbox.checked && objectImage) {
+                ctx.drawImage(objectImage, 0, 0, 640, 480);
+            }
+
+            if (faceCheckbox.checked && faceImage) {
+                ctx.drawImage(faceImage, 0, 0, 640, 480);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            // Get the client ID from the URL parameters
+            var urlParams = new URLSearchParams(window.location.search);
+            var clientId = urlParams.get('client_id') || "1";
+            var recordStatuses = {};
+            var lastFrameUpdate = {};
+
+            // Register the client ID with the server
+            socket.emit('register_client_id', clientId);
+
+            socket.on("connect", () => {
+                console.log("Connected to the server.");
+            });
+
+            socket.on("video_frame", (data) => {
+                var camera_id = data.camera_id;
+                var canvas = document.getElementById('canvas_' + camera_id);
+                var ctx = canvas.getContext('2d');
+
+                var faceCheckbox = document.getElementById('face-checkbox_' + camera_id);
+                var objectCheckbox = document.getElementById('object-checkbox_' + camera_id);
+
+                var originalImage = new Image();
+                originalImage.src = `data:image/jpeg;base64,${data.image}`;
+                originalImage.onload = function() {
+                    if (objectCheckbox.checked && data.object_image) {
+                        var objectImage = new Image();
+                        objectImage.src = `data:image/jpeg;base64,${data.object_image}`;
+                        objectImage.onload = function() {
+                            if (faceCheckbox.checked && data.face_image) {
+                                var faceImage = new Image();
+                                faceImage.src = `data:image/jpeg;base64,${data.face_image}`;
+                                faceImage.onload = function() {
+                                    drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, objectImage, faceImage);
+                                }
+                            } else {
+                                drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, objectImage, null);
+                            }
+                        }
+                    } else if (faceCheckbox.checked && data.face_image) {
+                        var faceImage = new Image();
+                        faceImage.src = `data:image/jpeg;base64,${data.face_image}`;
+                        faceImage.onload = function() {
+                            drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, null, faceImage);
+                        }
+                    } else {
+                        drawImages(ctx, originalImage, objectCheckbox, faceCheckbox, null, null);
+                    }
+                }
+                lastFrameUpdate[camera_id] = new Date();
+            });
+            function toggleRecord(camera_id, clientId) {
+            var recordKey = clientId + '_' + camera_id;
+
+            if (!(recordKey in recordStatuses)) {
+            recordStatuses[recordKey] = false;
+            }
+
+            recordStatuses[recordKey] = !recordStatuses[recordKey];
+            socket.emit('toggle_record', { 'camera_id': camera_id, 'client_id': clientId, 'status': recordStatuses[recordKey] });
+
+            var button = document.getElementById('record_button_' + camera_id);
+            button.textContent = button.textContent === 'Rec' ? 'Stop' : 'Rec';
+            }
+
+            var recordButtons = document.querySelectorAll('.record-button');
+            for (var i = 0; i < recordButtons.length; i++) {
+                recordButtons[i].addEventListener('click', function (event) {
+                var camera_id = parseInt(event.target.getAttribute('data-camera-id'));
+                toggleRecord(camera_id, clientId);
+            });
+        }
+        function checkCameraStream() {
+            var currentTime = new Date();
+                for (var camera_id in lastFrameUpdate) {
+                var elapsedTime = currentTime - lastFrameUpdate[camera_id];
+                var message = document.getElementById('camera_' + camera_id + '_message');
+                if (elapsedTime > 5000) {
+                    message.style.display = 'inline';
+                } else {
+                    message.style.display = 'none';
+                }
+            }
+            setTimeout(checkCameraStream, 1000);
+        }
+
+        checkCameraStream();
+        });
+    </script>
+</head>
+<body>
+    <h1>Real-time Video Streaming</h1>
+
+    <div id="camera_1">
+        <h2>Camera 1</h2>
+        <canvas id="canvas_1" width="640" height="480"></canvas>
+        <span id="camera_1_message" class="camera-message">No camera stream available</span>
+        <button id="record_button_1" class="record-button btn btn-danger" data-camera-id="1">Rec</button>
+        <div>
+            <input type="checkbox" id="object-checkbox_1"> Show Object Detection
+            <input type="checkbox" id="face-checkbox_1"> Show Face Detection
+        </div>
+    </div>
+
+    <div id="camera_0">
+        <h2>Camera 0</h2>
+        <canvas id="canvas_0" width="640" height="480"></canvas>
+        <span id="camera_0_message" class="camera-message">No camera stream available</span>
+        <button id="record_button_0" class="record-button btn btn-danger" data-camera-id="0">Rec</button>
+        <div>
+            <input type="checkbox" id="object-checkbox_0"> Show Object Detection
+            <input type="checkbox" id="face-checkbox_0"> Show Face Detection
+        </div>
+    </div>
+</body>
+</html>

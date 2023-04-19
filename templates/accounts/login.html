@@ -1,0 +1,110 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Login {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block bodyclass %} login-page {% endblock %}
+
+{% block content %}
+
+  <div class="wrapper wrapper-full-page ">
+    
+    <div class="full-page login-page ">
+      <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+      <div class="content">
+        <div class="container">
+          <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+            
+            <form role="form" method="post" action="">
+
+              {{ form.hidden_tag() }}
+
+              <div class="card card-login card-white">
+
+                <div class="card-header">
+                  <img src="{{ config.ASSETS_ROOT }}/img/card-primary.png" alt="">
+                  <h1 class="card-title">Log in</h1>
+                </div>
+
+                <div class="card-body mb-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="tim-icons icon-single-02"></i>
+                      </div>
+                    </div>
+                    {{ form.username(placeholder="Username", class="form-control") }}
+                  </div>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="tim-icons icon-lock-circle"></i>
+                      </div>
+                    </div>
+                    {{ form.password(placeholder="Password", class="form-control", type="password") }}
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  {% if msg %}
+                    <span class="text-danger">{{ msg | safe }}</span> 
+                    {% else %}
+                    <span>
+                      Add your credentials
+                    </span>
+                  {% endif %}
+                </div>
+
+                <div class="card-footer">
+
+                  <div>
+
+                    <button type="submit" name="login" class="btn btn-primary btn-lg btn-block mb-3">Sign IN</button>
+
+                  </div>
+
+                  {% if config.SOCIAL_AUTH_TWITTER or config.SOCIAL_AUTH_GITHUB %}
+
+                    <div class="text-center">
+
+                      <span class="text-muted">or Sign IN with</span> 
+                        
+                        <div class="text-center mx-auto">
+
+                          {% if config.SOCIAL_AUTH_GITHUB %}
+                            <a href="{{url_for('authentication_blueprint.login_github')}}" class="btn btn-github btn-sm">
+                              <i class="fab fa-github"></i>
+                            </a>
+                          {% endif %}
+                          
+                          {% if config.SOCIAL_AUTH_TWITTER %}
+                            <a href="{{url_for('authentication_blueprint.login_twitter')}}" class="btn btn-github btn-sm">
+                              <i class="fab fa-twitter"></i>
+                            </a>                         
+                          {% endif %}
+
+                        </div>
+
+                    </div>  
+
+                    {% endif %}
+
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% include 'includes/footer-fullscreen.html' %}
+
+    </div>
+
+  </div>
+ 
+{% endblock %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

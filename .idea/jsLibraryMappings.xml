@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{@popperjs/core, fetch, jquery-1.11.1, jquery-3.5.1, jquery-3.6.0, notify, plyr, socket.io-1.2.0, video, video-js, webcamjs}" />
+  </component>
+</project>
