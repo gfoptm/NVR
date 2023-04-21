@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/NVR_server_client.iml" filepath="$PROJECT_DIR$/.idea/NVR_server_client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/NVR.iml" filepath="$PROJECT_DIR$/.idea/NVR.iml" />
     </modules>
   </component>
 </project>
