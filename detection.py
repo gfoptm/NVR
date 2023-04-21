@@ -1,6 +1,9 @@
-import os
+
 import cv2
 import cvzone
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'face_recognition_models'))
 import face_recognition
 
 classNames = []
