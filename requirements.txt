@@ -72,7 +72,7 @@ MarkupSafe==2.1.2
 multidict==6.0.4
 netdisco==3.0.0
 netifaces==0.10.6
-numpy==1.24.2
+numpy
 oauthlib==3.2.2
 onvif-zeep==0.2.12
 onvif-zeep-async==1.2.11
@@ -127,7 +127,6 @@ zeroconf==0.56.0
 zipp==3.15.0
 zope.event==4.6
 zope.interface==6.0
-./face_recognition_models-0.3.0-py2.py3-none-any.whl
 
 
 
